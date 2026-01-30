@@ -11,7 +11,26 @@
                                                                    
 EOF
 
+echo "Starting System......."
+sleep 2
+echo "Checking For Potential Errors"
+sleep 2
+echo "Starting Docker Enabler......"
+
+sleep 1
+echo "System Initializing"
+
+sleep 2
+
+echo "System Initialized !"
+sleep 1
+
+echo "System Ready To Configue Docker For Container 'NoverixCloud-Michael' "
+
+sleep 3
+
     clear
+
     cat << "EOF"
  
                                                            
@@ -26,7 +45,9 @@ EOF
 EOF
 
 
-echo " Applying Docke Permissions to NoverixCloud-Michael "
+echo "Applying Docker Permissions to NoverixCloud-Michael "
+
+sleep 5
 
 lxc config set NoverixCloud-Michael security.nesting true
 lxc config device add NoverixCloud-Michael kvm unix-char path=/dev/kvm
@@ -41,3 +62,4 @@ lxc restart NoverixCloud-Michael
 
 echo "All Done!! "
 echo "Enjoy The Power Of Docker "
+echo "Made By Michael!!"
