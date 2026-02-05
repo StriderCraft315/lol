@@ -25,7 +25,7 @@ sleep 2
 echo "System Initialized !"
 sleep 1
 
-echo "System Ready To Configue Docker For Container 'NoverixCloud-Michael' "
+echo "System Ready To Configue Docker For Container 'vps-1421860082894766183-1' "
 
 sleep 3
 
@@ -49,15 +49,15 @@ echo "Applying Docker Permissions to NoverixCloud-Michael "
 
 sleep 5
 
-lxc config set NoverixCloud-Michael security.nesting true
-lxc config device add NoverixCloud-Michael kvm unix-char path=/dev/kvm
-lxc config set NoverixCloud-Michael security.nesting true
-lxc config set NoverixCloud-Michael security.privileged true
-lxc config set NoverixCloud-Michael security.syscalls.intercept.mknod true
-lxc config set NoverixCloud-Michael security.syscalls.intercept.setxattr true
-lxc config device add NoverixCloud-Michael fuse unix-char path=/dev/fuse
-lxc config set NoverixCloud-Michael linux.kernel_modules overlay,loop,nf_nat,ip_tables,ip6_tables,netlink_diag,br_netfilter
-lxc restart NoverixCloud-Michael
+lxc config set vps-1421860082894766183-1 security.nesting true
+lxc config device add vps-1421860082894766183-1 kvm unix-char path=/dev/kvm
+lxc config set vps-1421860082894766183-1 security.nesting true
+lxc config set vps-1421860082894766183-1 security.privileged true
+lxc config set vps-1421860082894766183-1 security.syscalls.intercept.mknod true
+lxc config set vps-1421860082894766183-1 security.syscalls.intercept.setxattr true
+lxc config device add vps-1421860082894766183-1 fuse unix-char path=/dev/fuse
+lxc config set vps-1421860082894766183-1 linux.kernel_modules overlay,loop,nf_nat,ip_tables,ip6_tables,netlink_diag,br_netfilter
+lxc restart vps-1421860082894766183-1
 
 
 echo "All Done!! "
