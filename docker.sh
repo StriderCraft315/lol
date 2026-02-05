@@ -11,43 +11,8 @@
                                                                    
 EOF
 
-echo "Starting System......."
-sleep 2
-echo "Checking For Potential Errors"
-sleep 2
-echo "Starting Docker Enabler......"
 
-sleep 1
-echo "System Initializing"
-
-sleep 2
-
-echo "System Initialized !"
-sleep 1
-
-echo "System Ready To Configue Docker For Container 'vps-1421860082894766183-1' "
-
-sleep 3
-
-    clear
-
-    cat << "EOF"
- 
-                                                           
- ____          _              _____         _   _         
-|    \ ___ ___| |_ ___ ___   |   __|___ ___| |_| |___ ___ 
-|  |  | . |  _| '_| -_|  _|  |   __|   | .'| . | | -_|  _|
-|____/|___|___|_,_|___|_|    |_____|_|_|__,|___|_|___|_|  
-                                                          
-                                                                                                                   
-                                                                                                                                            
-                                                                   
-EOF
-
-
-echo "Applying Docker Permissions to NoverixCloud-Michael "
-
-sleep 5
+echo "Applying Docker Permissions to vps-1421860082894766183-1 "
 
 lxc config set vps-1421860082894766183-1 security.nesting true
 lxc config device add vps-1421860082894766183-1 kvm unix-char path=/dev/kvm
