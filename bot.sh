@@ -1,7 +1,437 @@
 #!/bin/bash
-# NexusCloud Installer — protected build
-_a="Nx7!vK2@"
-_b="mQ9#zR4"
-_p="${_a}${_b}"
-_pl="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"
-printf '%s' "$_pl" | base64 -d | openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -d -pass pass:"$_p" | bash
+
+# ─────────────────────────────────────────────
+#  NexusCloud Bot Installer
+# ─────────────────────────────────────────────
+
+LIGHT_BLUE='\033[1;36m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+DIM='\033[2m'
+RESET='\033[0m'
+
+VALID_KEY_HASH="34550715062af006ac4fab288de67ecb44793c3a05c475227241535f6ef7a81b"
+
+spinner() {
+    local pid=$1 msg=$2
+    local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+    local i=0
+    while kill -0 "$pid" 2>/dev/null; do
+        printf "\r  ${LIGHT_BLUE}${frames[$i]}${RESET}  ${WHITE}%s${RESET}${DIM}...${RESET}" "$msg"
+        i=$(( (i + 1) % ${#frames[@]} ))
+        sleep 0.08
+    done
+    printf "\r  ${GREEN}✔${RESET}  ${WHITE}%s${RESET}%-30s\n" "$msg" " "
+}
+
+step() { echo -e "\n  ${LIGHT_BLUE}┌─${RESET} ${WHITE}$1${RESET}"; }
+ok()   { echo -e "  ${LIGHT_BLUE}└─${RESET} ${GREEN}✔ $1${RESET}"; }
+warn() { echo -e "  ${LIGHT_BLUE}└─${RESET} ${YELLOW}⚠ $1${RESET}"; }
+fail() { echo -e "\n  ${RED}✘ $1${RESET}\n"; exit 1; }
+info() { echo -e "       ${DIM}$1${RESET}"; }
+
+prompt() {
+    # prompt <VAR_NAME> <display_label> <default>
+    local var=$1 label=$2 default=$3
+    if [[ -n "$default" ]]; then
+        echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET} ${DIM}[${default}]:${RESET} "
+    else
+        echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET}: "
+    fi
+    read -r input
+    if [[ -z "$input" && -n "$default" ]]; then
+        eval "$var=\"$default\""
+    else
+        eval "$var=\"$input\""
+    fi
+}
+
+prompt_secret() {
+    local var=$1 label=$2
+    echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET}: "
+    read -rs input; echo ""
+    eval "$var=\"$input\""
+}
+
+# ══════════════════════════════════════════════
+#  BANNER
+# ══════════════════════════════════════════════
+clear
+echo -e "${LIGHT_BLUE}"
+cat << 'EOF'
+    _   _                          _                 _
+   | \ | |                        | |               | |
+   |  \| | _____  ___   _ ___  ___| | ___  _   _  __| |
+   | . ` |/ _ \ \/ / | | / __|/ __| |/ _ \| | | |/ _` |
+   | |\  |  __/>  <| |_| \__ \ (__| | (_) | |_| | (_| |
+   |_| \_|\___/_/\_\\__,_|___/\___|_|\___/ \__,_|\__,_|
+
+EOF
+echo -e "${RESET}"
+echo -e "  ${CYAN}╔══════════════════════════════════════════════╗${RESET}"
+echo -e "  ${CYAN}║${RESET}      ${WHITE}Discord Bot Installer  •  LXC Edition${RESET}     ${CYAN}║${RESET}"
+echo -e "  ${CYAN}╚══════════════════════════════════════════════╝${RESET}"
+echo ""
+
+# ══════════════════════════════════════════════
+#  KEY VERIFICATION
+# ══════════════════════════════════════════════
+echo -e "  ${CYAN}┌─────────────────────────────────────────────┐${RESET}"
+echo -e "  ${CYAN}│${RESET}  ${LIGHT_BLUE}🔑  License Key Required${RESET}                     ${CYAN}│${RESET}"
+echo -e "  ${CYAN}└─────────────────────────────────────────────┘${RESET}"
+echo ""
+
+MAX_ATTEMPTS=3; ATTEMPT=0
+while [[ $ATTEMPT -lt $MAX_ATTEMPTS ]]; do
+    ATTEMPT=$(( ATTEMPT + 1 ))
+    echo -ne "  ${WHITE}Enter your license key:${RESET} "
+    read -rs USER_KEY; echo ""
+    USER_HASH=$(printf '%s' "$USER_KEY" | sha256sum | awk '{print $1}')
+    if [[ "$USER_HASH" == "$VALID_KEY_HASH" ]]; then
+        echo ""; (sleep 1.0) & spinner $! "Verifying key"
+        echo -e "\n  ${GREEN}✔  Access granted.${RESET}\n"; sleep 0.4; break
+    else
+        REMAINING=$(( MAX_ATTEMPTS - ATTEMPT ))
+        [[ $REMAINING -gt 0 ]] && { echo -e "  ${RED}✘  Invalid key. ${REMAINING} attempt(s) remaining.${RESET}\n"; sleep 2; } \
+        || { echo -e "\n  ${RED}╔══════════════════════════════════════════════╗\n  ║   ✘  Access denied — too many attempts.      ║\n  ╚══════════════════════════════════════════════╝${RESET}\n"; exit 1; }
+    fi
+done
+
+[[ "$EUID" -ne 0 ]] && fail "Please run as root or with sudo."
+
+# ══════════════════════════════════════════════
+#  .ENV CONFIGURATION WIZARD
+# ══════════════════════════════════════════════
+echo -e "  ${CYAN}╔══════════════════════════════════════════════╗${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}⚙  Bot Configuration${RESET}                        ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${DIM}Press Enter to accept [defaults]${RESET}            ${CYAN}║${RESET}"
+echo -e "  ${CYAN}╚══════════════════════════════════════════════╝${RESET}"
+echo ""
+
+echo -e "  ${WHITE}── Discord ──────────────────────────────────${RESET}"
+prompt_secret   DISCORD_TOKEN   "Bot Token (discord.com/developers)"
+prompt          BOT_NAME        "Bot display name"          "NexusCloud"
+prompt          PREFIX          "Command prefix"            "!"
+prompt          BOT_VERSION     "Bot version"               "v1.0-PRO"
+prompt          BOT_DEVELOPER   "Developer name"            "Hopingboz"
+
+echo ""
+echo -e "  ${WHITE}── Admin ────────────────────────────────────${RESET}"
+prompt          MAIN_ADMIN_ID   "Your Discord User ID"      ""
+prompt          VPS_USER_ROLE_ID "VPS User Role ID (0 = auto-create)" "0"
+
+echo ""
+echo -e "  ${WHITE}── Server ───────────────────────────────────${RESET}"
+# Auto-detect public IP, let user override
+DETECTED_IP=$(curl -s --max-time 5 https://api.ipify.org 2>/dev/null || echo "")
+if [[ -n "$DETECTED_IP" ]]; then
+    info "Detected public IP: ${DETECTED_IP}"
+    prompt YOUR_SERVER_IP "Server public IP" "$DETECTED_IP"
+else
+    prompt YOUR_SERVER_IP "Server public IP" "127.0.0.1"
+fi
+
+echo ""
+echo -e "  ${WHITE}── Thresholds ───────────────────────────────${RESET}"
+prompt CPU_THRESHOLD    "CPU usage threshold (%)"   "90"
+prompt RAM_THRESHOLD    "RAM usage threshold (%)"   "90"
+
+echo ""
+echo -e "  ${WHITE}── Economy ──────────────────────────────────${RESET}"
+prompt COINS_PER_INVITE          "Coins per invite"          "50"
+prompt COINS_PER_MESSAGE         "Coins per message"         "1"
+prompt COINS_PER_VOICE_MINUTE    "Coins per voice minute"    "2"
+prompt COINS_DAILY_REWARD        "Daily reward coins"        "100"
+prompt DEFAULT_VPS_DURATION_DAYS "Default VPS duration (days)" "7"
+
+echo ""
+
+# ══════════════════════════════════════════════
+#  COUNTDOWN
+# ══════════════════════════════════════════════
+echo -e "  ${DIM}Starting installation in...${RESET}"
+for i in 3 2 1; do echo -ne "  ${LIGHT_BLUE}${i}${RESET}\r"; sleep 1; done
+echo -e "  ${GREEN}Go!${RESET}\n"
+
+# ══════════════════════════════════════════════
+#  STEP 1 — System update + deps
+# ══════════════════════════════════════════════
+step "Updating system packages"
+(apt-get update -qq > /dev/null 2>&1) & spinner $! "Refreshing apt cache"
+ok "Done"
+
+step "Installing base dependencies"
+(apt-get install -y python3-pip wget snapd curl -qq > /dev/null 2>&1) & spinner $! "Installing packages"
+ok "Done"
+
+step "Configuring pip"
+(mkdir -p ~/.config/pip && echo -e "[global]\nbreak-system-packages = true" > ~/.config/pip/pip.conf) &
+spinner $! "Writing pip config"; ok "Done"
+
+# ══════════════════════════════════════════════
+#  STEP 2 — ZFS detection (proper for LXC)
+# ══════════════════════════════════════════════
+step "Detecting ZFS availability"
+
+ZFS_AVAILABLE=false
+STORAGE_BACKEND="dir"
+POOL_SIZE=""
+
+# Check 1: kernel module already loaded
+if lsmod 2>/dev/null | grep -q "^zfs "; then
+    ZFS_AVAILABLE=true
+    info "ZFS kernel module is loaded"
+# Check 2: zfs binary exists and actually works
+elif command -v zfs &>/dev/null && zfs list &>/dev/null 2>&1; then
+    ZFS_AVAILABLE=true
+    info "ZFS binary found and functional"
+# Check 3: try loading the module (works on privileged containers)
+elif modprobe zfs &>/dev/null 2>&1; then
+    ZFS_AVAILABLE=true
+    info "ZFS module loaded via modprobe"
+# Check 4: try installing zfsutils and then check again
+else
+    info "Attempting to install zfsutils-linux..."
+    if apt-get install -y zfsutils-linux -qq > /dev/null 2>&1; then
+        if modprobe zfs &>/dev/null 2>&1 || zfs list &>/dev/null 2>&1; then
+            ZFS_AVAILABLE=true
+            info "ZFS installed and loaded successfully"
+        fi
+    fi
+fi
+
+if [[ "$ZFS_AVAILABLE" == "true" ]]; then
+    # Calculate loop device size: free space minus 5GB reserve
+    FREE_KB=$(df / | awk 'NR==2 {print $4}')
+    FREE_GB=$(( FREE_KB / 1024 / 1024 ))
+
+    if [[ $FREE_GB -gt 6 ]]; then
+        LOOP_GB=$(( FREE_GB - 5 ))
+        STORAGE_BACKEND="zfs"
+        POOL_SIZE="${LOOP_GB}GB"
+        ok "ZFS available — pool size: ${LOOP_GB}GB (${FREE_GB}GB free, 5GB reserved for host)"
+    else
+        warn "ZFS available but only ${FREE_GB}GB free — need >6GB. Falling back to dir."
+        STORAGE_BACKEND="dir"
+    fi
+else
+    warn "ZFS not available on this system — using directory backend"
+    STORAGE_BACKEND="dir"
+fi
+
+# ══════════════════════════════════════════════
+#  STEP 3 — Install LXD
+# ══════════════════════════════════════════════
+step "Installing LXD"
+export PATH="/snap/bin:$PATH"
+
+if command -v lxd &>/dev/null; then
+    warn "LXD already installed — skipping"
+else
+    (snap install lxd > /dev/null 2>&1) & spinner $! "Installing LXD via snap"
+    ok "LXD installed"
+fi
+
+# ══════════════════════════════════════════════
+#  STEP 4 — Init LXD
+# ══════════════════════════════════════════════
+step "Initializing LXD (backend: ${STORAGE_BACKEND})"
+
+# Check if already initialized by seeing if default profile has storage
+ALREADY_INIT=false
+lxc profile show default 2>/dev/null | grep -q "pool:" && ALREADY_INIT=true
+
+if [[ "$ALREADY_INIT" == "true" ]]; then
+    warn "LXD already initialized — skipping"
+else
+    if [[ "$STORAGE_BACKEND" == "zfs" ]]; then
+        info "ZFS loop device: ${POOL_SIZE}"
+        (cat <<PRESEED | lxd init --preseed > /dev/null 2>&1
+config: {}
+networks:
+- config:
+    ipv4.address: auto
+    ipv6.address: none
+  description: ""
+  name: lxdbr0
+  type: bridge
+storage_pools:
+- config:
+    size: ${POOL_SIZE}
+  description: ""
+  name: default
+  driver: zfs
+profiles:
+- config: {}
+  description: ""
+  devices:
+    eth0:
+      name: eth0
+      network: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: default
+      type: disk
+  name: default
+PRESEED
+) & spinner $! "Initializing LXD with ZFS (${POOL_SIZE})"
+
+    else
+        (cat <<PRESEED | lxd init --preseed > /dev/null 2>&1
+config: {}
+networks:
+- config:
+    ipv4.address: auto
+    ipv6.address: none
+  description: ""
+  name: lxdbr0
+  type: bridge
+storage_pools:
+- config: {}
+  description: ""
+  name: default
+  driver: dir
+profiles:
+- config: {}
+  description: ""
+  devices:
+    eth0:
+      name: eth0
+      network: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: default
+      type: disk
+  name: default
+PRESEED
+) & spinner $! "Initializing LXD with directory backend"
+    fi
+
+    ok "LXD initialized"
+fi
+
+# ══════════════════════════════════════════════
+#  STEP 5 — Download bot files
+# ══════════════════════════════════════════════
+step "Downloading bot.pyc"
+(wget -q "https://raw.githubusercontent.com/StriderCraft315/lol/main/bot.pyc" -O /root/bot.pyc 2>/dev/null) &
+spinner $! "Fetching bot.pyc"
+[[ -f /root/bot.pyc && -s /root/bot.pyc ]] && ok "bot.pyc saved to /root/bot.pyc" || fail "Download failed — check repo visibility."
+
+if wget -q "https://raw.githubusercontent.com/StriderCraft315/lol/main/requirements.txt" -O /tmp/req.txt 2>/dev/null && [[ -s /tmp/req.txt ]]; then
+    step "Installing Python requirements"
+    (pip3 install -r /tmp/req.txt -q > /dev/null 2>&1) & spinner $! "Installing packages"
+    ok "Done"
+fi
+
+# ══════════════════════════════════════════════
+#  STEP 6 — Write .env
+# ══════════════════════════════════════════════
+step "Writing .env configuration"
+
+# Set DEFAULT_STORAGE_POOL based on what we actually initialized
+[[ "$STORAGE_BACKEND" == "zfs" ]] && STORAGE_POOL_NAME="default" || STORAGE_POOL_NAME="default"
+
+cat > /root/.env << ENVEOF
+# ============================================
+# UnixNodes VPS Bot Configuration
+# Version: 7.1-PRO
+# ============================================
+
+# ============================================
+# DISCORD BOT CONFIGURATION (REQUIRED)
+# ============================================
+DISCORD_TOKEN=${DISCORD_TOKEN}
+BOT_NAME=${BOT_NAME}
+PREFIX=${PREFIX}
+BOT_VERSION=${BOT_VERSION}
+BOT_DEVELOPER=${BOT_DEVELOPER}
+
+# ============================================
+# ADMIN CONFIGURATION (REQUIRED)
+# ============================================
+MAIN_ADMIN_ID=${MAIN_ADMIN_ID}
+VPS_USER_ROLE_ID=${VPS_USER_ROLE_ID}
+
+# ============================================
+# SERVER CONFIGURATION
+# ============================================
+YOUR_SERVER_IP=${YOUR_SERVER_IP}
+DEFAULT_STORAGE_POOL=${STORAGE_POOL_NAME}
+
+# ============================================
+# RESOURCE MONITORING THRESHOLDS
+# ============================================
+CPU_THRESHOLD=${CPU_THRESHOLD}
+RAM_THRESHOLD=${RAM_THRESHOLD}
+
+# ============================================
+# COINS & ECONOMY SYSTEM
+# ============================================
+COINS_PER_INVITE=${COINS_PER_INVITE}
+COINS_PER_MESSAGE=${COINS_PER_MESSAGE}
+COINS_PER_VOICE_MINUTE=${COINS_PER_VOICE_MINUTE}
+COINS_DAILY_REWARD=${COINS_DAILY_REWARD}
+COINS_VPS_RENEWAL_1DAY=50
+COINS_VPS_RENEWAL_7DAYS=350
+COINS_VPS_RENEWAL_30DAYS=1500
+DEFAULT_VPS_DURATION_DAYS=${DEFAULT_VPS_DURATION_DAYS}
+VPS_EXPIRY_WARNING_HOURS=24
+MESSAGE_COOLDOWN_SECONDS=60
+VOICE_MIN_DURATION_MINUTES=5
+LEADERBOARD_TOP_COUNT=10
+ENVEOF
+
+chmod 600 /root/.env
+ok ".env written to /root/.env (chmod 600)"
+
+# ══════════════════════════════════════════════
+#  STEP 7 — Systemd service
+# ══════════════════════════════════════════════
+step "Creating systemd service"
+(cat > /etc/systemd/system/bot.service << 'SVCEOF'
+[Unit]
+Description=UnixBot Discord Bot
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root
+ExecStart=/usr/bin/python3 /root/bot.pyc
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+SVCEOF
+sleep 0.3) & spinner $! "Writing service file"; ok "Done"
+
+step "Starting bot service"
+(systemctl daemon-reload > /dev/null 2>&1) & spinner $! "Reloading daemon"
+(systemctl enable bot > /dev/null 2>&1) & spinner $! "Enabling on boot"
+(systemctl restart bot > /dev/null 2>&1 && sleep 0.5) & spinner $! "Starting bot"
+systemctl is-active --quiet bot && ok "Bot is running" || warn "Check: systemctl status bot"
+
+# ══════════════════════════════════════════════
+#  DONE
+# ══════════════════════════════════════════════
+echo ""
+echo -e "  ${CYAN}╔══════════════════════════════════════════════╗${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${GREEN}✔  Installation complete!${RESET}                   ${CYAN}║${RESET}"
+echo -e "  ${CYAN}╠══════════════════════════════════════════════╣${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${WHITE}LXD backend :${RESET} ${LIGHT_BLUE}${STORAGE_BACKEND}$(  [[ $POOL_SIZE ]] && echo " (${POOL_SIZE})" )${RESET}$(printf '%*s' $(( 30 - ${#STORAGE_BACKEND} - ${#POOL_SIZE} - 1 )) '')${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${WHITE}Server IP   :${RESET} ${LIGHT_BLUE}${YOUR_SERVER_IP}${RESET}$(printf '%*s' $(( 30 - ${#YOUR_SERVER_IP} )) '')${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${WHITE}.env        :${RESET} ${LIGHT_BLUE}/root/.env${RESET}                     ${CYAN}║${RESET}"
+echo -e "  ${CYAN}╠══════════════════════════════════════════════╣${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl status bot${RESET}   — check status        ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl restart bot${RESET}  — restart              ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}journalctl -u bot -f${RESET}   — live logs           ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}lxc list${RESET}               — list containers      ${CYAN}║${RESET}"
+echo -e "  ${CYAN}╚══════════════════════════════════════════════╝${RESET}"
+echo ""
