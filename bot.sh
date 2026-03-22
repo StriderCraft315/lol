@@ -34,19 +34,12 @@ fail() { echo -e "\n  ${RED}✘ $1${RESET}\n"; exit 1; }
 info() { echo -e "       ${DIM}$1${RESET}"; }
 
 prompt() {
-    # prompt <VAR_NAME> <display_label> <default>
     local var=$1 label=$2 default=$3
-    if [[ -n "$default" ]]; then
-        echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET} ${DIM}[${default}]:${RESET} "
-    else
-        echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET}: "
-    fi
+    [[ -n "$default" ]] \
+        && echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET} ${DIM}[${default}]:${RESET} " \
+        || echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET}: "
     read -r input
-    if [[ -z "$input" && -n "$default" ]]; then
-        eval "$var=\"$default\""
-    else
-        eval "$var=\"$input\""
-    fi
+    [[ -z "$input" && -n "$default" ]] && eval "$var=\"$default\"" || eval "$var=\"$input\""
 }
 
 prompt_secret() {
@@ -54,6 +47,10 @@ prompt_secret() {
     echo -ne "  ${LIGHT_BLUE}▸${RESET} ${WHITE}${label}${RESET}: "
     read -rs input; echo ""
     eval "$var=\"$input\""
+}
+
+zfs_is_functional() {
+    zfs list > /dev/null 2>&1
 }
 
 # ══════════════════════════════════════════════
@@ -95,15 +92,21 @@ while [[ $ATTEMPT -lt $MAX_ATTEMPTS ]]; do
         echo -e "\n  ${GREEN}✔  Access granted.${RESET}\n"; sleep 0.4; break
     else
         REMAINING=$(( MAX_ATTEMPTS - ATTEMPT ))
-        [[ $REMAINING -gt 0 ]] && { echo -e "  ${RED}✘  Invalid key. ${REMAINING} attempt(s) remaining.${RESET}\n"; sleep 2; } \
-        || { echo -e "\n  ${RED}╔══════════════════════════════════════════════╗\n  ║   ✘  Access denied — too many attempts.      ║\n  ╚══════════════════════════════════════════════╝${RESET}\n"; exit 1; }
+        if [[ $REMAINING -gt 0 ]]; then
+            echo -e "  ${RED}✘  Invalid key. ${REMAINING} attempt(s) remaining.${RESET}\n"; sleep 2
+        else
+            echo -e "\n  ${RED}╔══════════════════════════════════════════════╗${RESET}"
+            echo -e "  ${RED}║   ✘  Access denied — too many attempts.      ║${RESET}"
+            echo -e "  ${RED}╚══════════════════════════════════════════════╝${RESET}\n"
+            exit 1
+        fi
     fi
 done
 
 [[ "$EUID" -ne 0 ]] && fail "Please run as root or with sudo."
 
 # ══════════════════════════════════════════════
-#  .ENV CONFIGURATION WIZARD
+#  CONFIGURATION WIZARD
 # ══════════════════════════════════════════════
 echo -e "  ${CYAN}╔══════════════════════════════════════════════╗${RESET}"
 echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}⚙  Bot Configuration${RESET}                        ${CYAN}║${RESET}"
@@ -112,41 +115,36 @@ echo -e "  ${CYAN}╚═══════════════════�
 echo ""
 
 echo -e "  ${WHITE}── Discord ──────────────────────────────────${RESET}"
-prompt_secret   DISCORD_TOKEN   "Bot Token (discord.com/developers)"
-prompt          BOT_NAME        "Bot display name"          "NexusCloud"
-prompt          PREFIX          "Command prefix"            "!"
-prompt          BOT_VERSION     "Bot version"               "v1.0-PRO"
-prompt          BOT_DEVELOPER   "Developer name"            "Hopingboz"
+prompt_secret DISCORD_TOKEN  "Bot Token (discord.com/developers)"
+prompt        BOT_NAME       "Bot display name"           "NexusCloud"
+prompt        PREFIX         "Command prefix"             "!"
+prompt        BOT_VERSION    "Bot version"                "v1.0-PRO"
+prompt        BOT_DEVELOPER  "Developer name"             "Hopingboz"
+prompt        LOGO_URL       "Bot logo URL (embed thumbnail)" "https://i.imgur.com/dpatuSj.png"
 
 echo ""
 echo -e "  ${WHITE}── Admin ────────────────────────────────────${RESET}"
-prompt          MAIN_ADMIN_ID   "Your Discord User ID"      ""
-prompt          VPS_USER_ROLE_ID "VPS User Role ID (0 = auto-create)" "0"
+prompt MAIN_ADMIN_ID      "Your Discord User ID"               ""
+prompt VPS_USER_ROLE_ID   "VPS User Role ID (0 = auto-create)" "0"
 
 echo ""
 echo -e "  ${WHITE}── Server ───────────────────────────────────${RESET}"
-# Auto-detect public IP, let user override
 DETECTED_IP=$(curl -s --max-time 5 https://api.ipify.org 2>/dev/null || echo "")
-if [[ -n "$DETECTED_IP" ]]; then
-    info "Detected public IP: ${DETECTED_IP}"
-    prompt YOUR_SERVER_IP "Server public IP" "$DETECTED_IP"
-else
-    prompt YOUR_SERVER_IP "Server public IP" "127.0.0.1"
-fi
+[[ -n "$DETECTED_IP" ]] && info "Detected public IP: ${DETECTED_IP}"
+prompt YOUR_SERVER_IP "Server public IP" "${DETECTED_IP:-127.0.0.1}"
 
 echo ""
 echo -e "  ${WHITE}── Thresholds ───────────────────────────────${RESET}"
-prompt CPU_THRESHOLD    "CPU usage threshold (%)"   "90"
-prompt RAM_THRESHOLD    "RAM usage threshold (%)"   "90"
+prompt CPU_THRESHOLD "CPU usage threshold (%)" "90"
+prompt RAM_THRESHOLD "RAM usage threshold (%)" "90"
 
 echo ""
 echo -e "  ${WHITE}── Economy ──────────────────────────────────${RESET}"
-prompt COINS_PER_INVITE          "Coins per invite"          "50"
-prompt COINS_PER_MESSAGE         "Coins per message"         "1"
-prompt COINS_PER_VOICE_MINUTE    "Coins per voice minute"    "2"
-prompt COINS_DAILY_REWARD        "Daily reward coins"        "100"
-prompt DEFAULT_VPS_DURATION_DAYS "Default VPS duration (days)" "7"
-
+prompt COINS_PER_INVITE          "Coins per invite"              "50"
+prompt COINS_PER_MESSAGE         "Coins per message"             "1"
+prompt COINS_PER_VOICE_MINUTE    "Coins per voice minute"        "2"
+prompt COINS_DAILY_REWARD        "Daily reward coins"            "100"
+prompt DEFAULT_VPS_DURATION_DAYS "Default VPS duration (days)"   "7"
 echo ""
 
 # ══════════════════════════════════════════════
@@ -157,69 +155,50 @@ for i in 3 2 1; do echo -ne "  ${LIGHT_BLUE}${i}${RESET}\r"; sleep 1; done
 echo -e "  ${GREEN}Go!${RESET}\n"
 
 # ══════════════════════════════════════════════
-#  STEP 1 — System update + deps
+#  STEP 1 — System packages
 # ══════════════════════════════════════════════
 step "Updating system packages"
 (apt-get update -qq > /dev/null 2>&1) & spinner $! "Refreshing apt cache"
 ok "Done"
 
 step "Installing base dependencies"
-(apt-get install -y python3-pip wget snapd curl -qq > /dev/null 2>&1) & spinner $! "Installing packages"
+(apt-get install -y python3-pip wget snapd curl -qq > /dev/null 2>&1) & spinner $! "Installing apt packages"
 ok "Done"
 
 step "Configuring pip"
 (mkdir -p ~/.config/pip && echo -e "[global]\nbreak-system-packages = true" > ~/.config/pip/pip.conf) &
 spinner $! "Writing pip config"; ok "Done"
 
-# ══════════════════════════════════════════════
-#  STEP 2 — ZFS detection (proper for LXC)
-# ══════════════════════════════════════════════
-step "Detecting ZFS availability"
+step "Installing Python packages"
+(pip3 install discord PyNaCl requests -q > /dev/null 2>&1) & spinner $! "Installing discord PyNaCl requests"
+ok "Done"
 
-ZFS_AVAILABLE=false
+# ══════════════════════════════════════════════
+#  STEP 2 — ZFS detection
+# ══════════════════════════════════════════════
+step "Detecting ZFS support"
+
 STORAGE_BACKEND="dir"
 POOL_SIZE=""
 
-# Check 1: kernel module already loaded
-if lsmod 2>/dev/null | grep -q "^zfs "; then
-    ZFS_AVAILABLE=true
-    info "ZFS kernel module is loaded"
-# Check 2: zfs binary exists and actually works
-elif command -v zfs &>/dev/null && zfs list &>/dev/null 2>&1; then
-    ZFS_AVAILABLE=true
-    info "ZFS binary found and functional"
-# Check 3: try loading the module (works on privileged containers)
-elif modprobe zfs &>/dev/null 2>&1; then
-    ZFS_AVAILABLE=true
-    info "ZFS module loaded via modprobe"
-# Check 4: try installing zfsutils and then check again
-else
-    info "Attempting to install zfsutils-linux..."
-    if apt-get install -y zfsutils-linux -qq > /dev/null 2>&1; then
-        if modprobe zfs &>/dev/null 2>&1 || zfs list &>/dev/null 2>&1; then
-            ZFS_AVAILABLE=true
-            info "ZFS installed and loaded successfully"
-        fi
-    fi
+if ! command -v zfs &>/dev/null; then
+    apt-get install -y zfsutils-linux -qq > /dev/null 2>&1
 fi
 
-if [[ "$ZFS_AVAILABLE" == "true" ]]; then
-    # Calculate loop device size: free space minus 5GB reserve
+if zfs_is_functional; then
     FREE_KB=$(df / | awk 'NR==2 {print $4}')
     FREE_GB=$(( FREE_KB / 1024 / 1024 ))
-
     if [[ $FREE_GB -gt 6 ]]; then
         LOOP_GB=$(( FREE_GB - 5 ))
         STORAGE_BACKEND="zfs"
         POOL_SIZE="${LOOP_GB}GB"
-        ok "ZFS available — pool size: ${LOOP_GB}GB (${FREE_GB}GB free, 5GB reserved for host)"
+        ok "ZFS functional — pool: ${LOOP_GB}GB (${FREE_GB}GB free, 5GB reserved)"
     else
-        warn "ZFS available but only ${FREE_GB}GB free — need >6GB. Falling back to dir."
-        STORAGE_BACKEND="dir"
+        warn "ZFS works but only ${FREE_GB}GB free — falling back to dir"
     fi
 else
-    warn "ZFS not available on this system — using directory backend"
-    STORAGE_BACKEND="dir"
+    warn "ZFS not supported on this system — using directory backend"
+    info "(/dev/zfs unavailable — unprivileged container or no ZFS kernel module)"
 fi
 
 # ══════════════════════════════════════════════
@@ -240,7 +219,6 @@ fi
 # ══════════════════════════════════════════════
 step "Initializing LXD (backend: ${STORAGE_BACKEND})"
 
-# Check if already initialized by seeing if default profile has storage
 ALREADY_INIT=false
 lxc profile show default 2>/dev/null | grep -q "pool:" && ALREADY_INIT=true
 
@@ -279,7 +257,6 @@ profiles:
   name: default
 PRESEED
 ) & spinner $! "Initializing LXD with ZFS (${POOL_SIZE})"
-
     else
         (cat <<PRESEED | lxd init --preseed > /dev/null 2>&1
 config: {}
@@ -311,90 +288,108 @@ profiles:
 PRESEED
 ) & spinner $! "Initializing LXD with directory backend"
     fi
-
     ok "LXD initialized"
 fi
 
 # ══════════════════════════════════════════════
-#  STEP 5 — Download bot files
+#  STEP 5 — Download bot.py
 # ══════════════════════════════════════════════
-step "Downloading bot.pyc"
-(wget -q "https://raw.githubusercontent.com/StriderCraft315/lol/main/bot.pyc" -O /root/bot.pyc 2>/dev/null) &
-spinner $! "Fetching bot.pyc"
-[[ -f /root/bot.pyc && -s /root/bot.pyc ]] && ok "bot.pyc saved to /root/bot.pyc" || fail "Download failed — check repo visibility."
+step "Downloading bot.py"
+(wget -q "https://raw.githubusercontent.com/StriderCraft315/lol/main/bot.py" -O /root/bot.py 2>/dev/null) &
+spinner $! "Fetching bot.py"
+[[ -f /root/bot.py && -s /root/bot.py ]] && ok "bot.py downloaded to /root/bot.py" || fail "Download failed — check repo visibility."
 
-if wget -q "https://raw.githubusercontent.com/StriderCraft315/lol/main/requirements.txt" -O /tmp/req.txt 2>/dev/null && [[ -s /tmp/req.txt ]]; then
-    step "Installing Python requirements"
-    (pip3 install -r /tmp/req.txt -q > /dev/null 2>&1) & spinner $! "Installing packages"
-    ok "Done"
+# ══════════════════════════════════════════════
+#  STEP 6 — Patch bot.py (inject config, remove dotenv)
+# ══════════════════════════════════════════════
+step "Patching bot.py with your configuration"
+
+# Escape special chars for use in python string literals
+esc() { printf '%s' "$1" | sed "s/\\\\/\\\\\\\\/g; s/'/\\\\'/g"; }
+
+TOKEN_ESC=$(esc "$DISCORD_TOKEN")
+NAME_ESC=$(esc "$BOT_NAME")
+PREFIX_ESC=$(esc "$PREFIX")
+IP_ESC=$(esc "$YOUR_SERVER_IP")
+VER_ESC=$(esc "$BOT_VERSION")
+DEV_ESC=$(esc "$BOT_DEVELOPER")
+LOGO_ESC=$(esc "$LOGO_URL")
+
+(python3 - << PYEOF
+import re
+
+with open('/root/bot.py', 'r') as f:
+    src = f.read()
+
+# ── 1. Remove dotenv import and load_dotenv() calls ──────────────────────────
+src = re.sub(r'from dotenv import load_dotenv\n', '', src)
+src = re.sub(r'load_dotenv\(.*?\)\n', '', src)
+
+# ── 2. Replace the config block (lines 23-34) with hardcoded values ──────────
+old_block = re.search(
+    r"DISCORD_TOKEN = os\.getenv\('DISCORD_TOKEN'\).*?BOT_DEVELOPER = os\.getenv\('BOT_DEVELOPER'.*?\)",
+    src, re.DOTALL
+)
+if old_block:
+    new_block = """DISCORD_TOKEN = '${TOKEN_ESC}'
+if not DISCORD_TOKEN:
+    raise ValueError("DISCORD_TOKEN is not set.")
+
+BOT_NAME = '${NAME_ESC}'
+PREFIX = '${PREFIX_ESC}'
+YOUR_SERVER_IP = '${IP_ESC}'
+MAIN_ADMIN_ID = ${MAIN_ADMIN_ID}
+VPS_USER_ROLE_ID = ${VPS_USER_ROLE_ID}
+DEFAULT_STORAGE_POOL = 'default'
+BOT_VERSION = '${VER_ESC}'
+BOT_DEVELOPER = '${DEV_ESC}'"""
+    src = src[:old_block.start()] + new_block + src[old_block.end():]
+
+# ── 3. Replace all remaining os.getenv calls for these vars ──────────────────
+replacements = {
+    r"os\.getenv\('DISCORD_TOKEN'\)":             "'${TOKEN_ESC}'",
+    r"os\.getenv\('BOT_NAME',\s*'[^']*'\)":       "'${NAME_ESC}'",
+    r"os\.getenv\('PREFIX',\s*'[^']*'\)":         "'${PREFIX_ESC}'",
+    r"os\.getenv\('YOUR_SERVER_IP',\s*'[^']*'\)": "'${IP_ESC}'",
+    r"os\.getenv\('MAIN_ADMIN_ID',\s*'[^']*'\)":  "'${MAIN_ADMIN_ID}'",
+    r"os\.getenv\('VPS_USER_ROLE_ID',\s*'[^']*'\)": "'${VPS_USER_ROLE_ID}'",
+    r"os\.getenv\('DEFAULT_STORAGE_POOL',\s*'[^']*'\)": "'default'",
+    r"os\.getenv\('BOT_VERSION',\s*'[^']*'\)":    "'${VER_ESC}'",
+    r"os\.getenv\('BOT_DEVELOPER',\s*'[^']*'\)":  "'${DEV_ESC}'",
+    r"os\.getenv\('CPU_THRESHOLD',\s*'[^']*'\)":  "'${CPU_THRESHOLD}'",
+    r"os\.getenv\('RAM_THRESHOLD',\s*'[^']*'\)":  "'${RAM_THRESHOLD}'",
+}
+for pattern, replacement in replacements.items():
+    src = re.sub(pattern, replacement, src)
+
+# ── 4. Replace hardcoded thumbnail URLs with user's logo ─────────────────────
+src = src.replace('https://i.imgur.com/dpatuSj.png', '${LOGO_ESC}')
+
+# ── 5. Patch reload-env command — no longer reads from .env ──────────────────
+src = src.replace(
+    'load_dotenv(override=True)',
+    '# config is baked in — no .env to reload'
+)
+
+with open('/root/bot.py', 'w') as f:
+    f.write(src)
+
+print("ok")
+PYEOF
+sleep 0.3) & spinner $! "Injecting config into bot.py"
+
+# Verify patch worked
+if python3 -c "import ast; ast.parse(open('/root/bot.py').read())" 2>/dev/null; then
+    ok "bot.py patched and syntax verified"
+else
+    fail "bot.py has a syntax error after patching — check your token/config for special characters"
 fi
 
 # ══════════════════════════════════════════════
-#  STEP 6 — Write .env
-# ══════════════════════════════════════════════
-step "Writing .env configuration"
-
-# Set DEFAULT_STORAGE_POOL based on what we actually initialized
-[[ "$STORAGE_BACKEND" == "zfs" ]] && STORAGE_POOL_NAME="default" || STORAGE_POOL_NAME="default"
-
-cat > /root/.env << ENVEOF
-# ============================================
-# UnixNodes VPS Bot Configuration
-# Version: 7.1-PRO
-# ============================================
-
-# ============================================
-# DISCORD BOT CONFIGURATION (REQUIRED)
-# ============================================
-DISCORD_TOKEN=${DISCORD_TOKEN}
-BOT_NAME=${BOT_NAME}
-PREFIX=${PREFIX}
-BOT_VERSION=${BOT_VERSION}
-BOT_DEVELOPER=${BOT_DEVELOPER}
-
-# ============================================
-# ADMIN CONFIGURATION (REQUIRED)
-# ============================================
-MAIN_ADMIN_ID=${MAIN_ADMIN_ID}
-VPS_USER_ROLE_ID=${VPS_USER_ROLE_ID}
-
-# ============================================
-# SERVER CONFIGURATION
-# ============================================
-YOUR_SERVER_IP=${YOUR_SERVER_IP}
-DEFAULT_STORAGE_POOL=${STORAGE_POOL_NAME}
-
-# ============================================
-# RESOURCE MONITORING THRESHOLDS
-# ============================================
-CPU_THRESHOLD=${CPU_THRESHOLD}
-RAM_THRESHOLD=${RAM_THRESHOLD}
-
-# ============================================
-# COINS & ECONOMY SYSTEM
-# ============================================
-COINS_PER_INVITE=${COINS_PER_INVITE}
-COINS_PER_MESSAGE=${COINS_PER_MESSAGE}
-COINS_PER_VOICE_MINUTE=${COINS_PER_VOICE_MINUTE}
-COINS_DAILY_REWARD=${COINS_DAILY_REWARD}
-COINS_VPS_RENEWAL_1DAY=50
-COINS_VPS_RENEWAL_7DAYS=350
-COINS_VPS_RENEWAL_30DAYS=1500
-DEFAULT_VPS_DURATION_DAYS=${DEFAULT_VPS_DURATION_DAYS}
-VPS_EXPIRY_WARNING_HOURS=24
-MESSAGE_COOLDOWN_SECONDS=60
-VOICE_MIN_DURATION_MINUTES=5
-LEADERBOARD_TOP_COUNT=10
-ENVEOF
-
-chmod 600 /root/.env
-ok ".env written to /root/.env (chmod 600)"
-
-# ══════════════════════════════════════════════
-#  STEP 7 — Systemd service
+#  STEP 7 — Systemd service (unixbot)
 # ══════════════════════════════════════════════
 step "Creating systemd service"
-(cat > /etc/systemd/system/bot.service << 'SVCEOF'
+cat > /etc/systemd/system/unixbot.service << 'SVCEOF'
 [Unit]
 Description=UnixBot Discord Bot
 After=network.target
@@ -402,21 +397,21 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/root
-ExecStart=/usr/bin/python3 /root/bot.pyc
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/usr/bin/python3 /root/bot.py
 Restart=always
 RestartSec=5
-Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
 SVCEOF
-sleep 0.3) & spinner $! "Writing service file"; ok "Done"
+ok "Service file written to /etc/systemd/system/unixbot.service"
 
-step "Starting bot service"
+step "Starting unixbot service"
 (systemctl daemon-reload > /dev/null 2>&1) & spinner $! "Reloading daemon"
-(systemctl enable bot > /dev/null 2>&1) & spinner $! "Enabling on boot"
-(systemctl restart bot > /dev/null 2>&1 && sleep 0.5) & spinner $! "Starting bot"
-systemctl is-active --quiet bot && ok "Bot is running" || warn "Check: systemctl status bot"
+(systemctl enable unixbot > /dev/null 2>&1) & spinner $! "Enabling on boot"
+(systemctl restart unixbot > /dev/null 2>&1 && sleep 0.8) & spinner $! "Starting bot"
+systemctl is-active --quiet unixbot && ok "Bot is running" || warn "Check: systemctl status unixbot"
 
 # ══════════════════════════════════════════════
 #  DONE
@@ -427,11 +422,11 @@ echo -e "  ${CYAN}║${RESET}  ${GREEN}✔  Installation complete!${RESET}      
 echo -e "  ${CYAN}╠══════════════════════════════════════════════╣${RESET}"
 echo -e "  ${CYAN}║${RESET}  ${WHITE}LXD backend :${RESET} ${LIGHT_BLUE}${STORAGE_BACKEND}$(  [[ $POOL_SIZE ]] && echo " (${POOL_SIZE})" )${RESET}$(printf '%*s' $(( 30 - ${#STORAGE_BACKEND} - ${#POOL_SIZE} - 1 )) '')${CYAN}║${RESET}"
 echo -e "  ${CYAN}║${RESET}  ${WHITE}Server IP   :${RESET} ${LIGHT_BLUE}${YOUR_SERVER_IP}${RESET}$(printf '%*s' $(( 30 - ${#YOUR_SERVER_IP} )) '')${CYAN}║${RESET}"
-echo -e "  ${CYAN}║${RESET}  ${WHITE}.env        :${RESET} ${LIGHT_BLUE}/root/.env${RESET}                     ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${WHITE}Bot file    :${RESET} ${LIGHT_BLUE}/root/bot.py${RESET}                   ${CYAN}║${RESET}"
 echo -e "  ${CYAN}╠══════════════════════════════════════════════╣${RESET}"
-echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl status bot${RESET}   — check status        ${CYAN}║${RESET}"
-echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl restart bot${RESET}  — restart              ${CYAN}║${RESET}"
-echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}journalctl -u bot -f${RESET}   — live logs           ${CYAN}║${RESET}"
-echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}lxc list${RESET}               — list containers      ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl status unixbot${RESET}  — check status    ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}systemctl restart unixbot${RESET} — restart         ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}journalctl -u unixbot -f${RESET}  — live logs       ${CYAN}║${RESET}"
+echo -e "  ${CYAN}║${RESET}  ${LIGHT_BLUE}lxc list${RESET}                  — containers       ${CYAN}║${RESET}"
 echo -e "  ${CYAN}╚══════════════════════════════════════════════╝${RESET}"
 echo ""
