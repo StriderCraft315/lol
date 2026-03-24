@@ -21,6 +21,11 @@
         "name": "Debian 12",
         "vmid": 4001,
         "link": "https://images.cdn.convoypanel.com/debian/debian-12-amd64.vma.zst"
+      },
+      {
+        "name": "Debian 11",
+        "vmid": 4002,
+        "link": "https://images.cdn.convoypanel.com/debian/debian-11-amd64.vma.zst"
       }
     ]
   }
