@@ -1,12 +1,22 @@
 [
   {
-    "name": "Ubuntu 22.04",
-    "vmid": 1002,
-    "link": "https://images.cdn.convoypanel.com/ubuntu/ubuntu-22-04-amd64.vma.zst"
+    "name": "Ubuntu",
+    "templates": [
+      {
+        "name": "Ubuntu 22.04",
+        "vmid": 1002,
+        "link": "https://images.cdn.convoypanel.com/ubuntu/ubuntu-22-04-amd64.vma.zst"
+      }
+    ]
   },
   {
-    "name": "Debian 11",
-    "vmid": 4000,
-    "link": "https://images.cdn.convoypanel.com/debian/debian-11-amd64.vma.zst"
+    "name": "Debian",
+    "templates": [
+      {
+        "name": "Debian 11",
+        "vmid": 4002,
+        "link": "https://images.cdn.convoypanel.com/debian/debian-11-amd64.vma.zst"
+      }
+    ]
   }
 ]
